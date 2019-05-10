@@ -8,7 +8,6 @@ import android.view.ViewGroup
 
 class GameplayFragment : Fragment() {
     companion object {
-
         fun newInstance(): GameplayFragment {
             return GameplayFragment()
         }
