@@ -29,7 +29,7 @@
         android:layout_marginTop="50dp"
         android:width="250dp"
         android:height="100dp"
-        android:onClick="startGame"
+        android:onClick="onPlayPressed"
         android:text="@string/play"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"

@@ -45,14 +45,8 @@ class MainActivity : FragmentActivity(), EndgameDialogFragment.EndgameDialogList
         }
     }
 
-    fun startGame(@Suppress("UNUSED_PARAMETER") view: View) {
-        gameCountdownText.text = "5"
-        gameMainText.text = "TAP"
-        gameScoreText.text = "0"
-
-        startCountdownTimer.start()
-
-        showFragment(supportFragmentManager, gameplayFragment)
+    fun onPlayPressed(@Suppress("UNUSED_PARAMETER") view: View) {
+        startGame()
     }
 
     fun tap(@Suppress("UNUSED_PARAMETER") view: View) {
@@ -76,6 +70,10 @@ class MainActivity : FragmentActivity(), EndgameDialogFragment.EndgameDialogList
     override fun onDialogNegativeClick(dialog: DialogFragment) {
         hideFragment(supportFragmentManager, gameplayFragment)
         resetGame()
+        startGame()
+    }
+
+    private fun startGame() {
         gameCountdownText.text = "5"
         gameMainText.text = "TAP"
         gameScoreText.text = "0"
