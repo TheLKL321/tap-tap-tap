@@ -2,15 +2,18 @@ package com.thelkl.taptaptap
 
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentActivity
 import android.view.View
 import kotlinx.android.synthetic.main.gameplay_fragment.*
 import kotlinx.android.synthetic.main.main_activity.*
 
-class MainActivity : FragmentActivity() {
+class MainActivity : FragmentActivity(), EndgameDialogFragment.EndgameDialogListener {
     private var taps = 0
     private lateinit var startCountdownTimer: CountDownTimer
-    var currentTime: Double = START_COUNTDOWN_TIME.toDouble()
+    private lateinit var gameCountdownTimer: CountDownTimer
+    var currentStartTime: Double = START_COUNTDOWN_TIME.toDouble()
+    var currentGameTime: Double = GAMEPLAY_COUNTDOWN_TIME.toDouble()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,13 +21,25 @@ class MainActivity : FragmentActivity() {
 
         hideFragment(supportFragmentManager, gameplayFragment)
 
-        startCountdownTimer = object: CountDownTimer(START_COUNTDOWN_TIME.toLong() * 1000, 100) {
+        gameCountdownTimer = object: CountDownTimer(GAMEPLAY_COUNTDOWN_TIME.toLong() * 1000, 100) {
             override fun onTick(millisUntilFinished: Long) {
-                startCountdownText.text = Math.ceil(currentTime).toInt().toString()
-                currentTime -= 0.1
+                gameCountdownText.text = Math.ceil(currentGameTime).toInt().toString()
+                currentGameTime -= 0.1
             }
 
             override fun onFinish() {
+                newEndgameDialogInstance(taps).show(supportFragmentManager, "endgame_dialog")
+            }
+        }
+
+        startCountdownTimer = object: CountDownTimer(START_COUNTDOWN_TIME.toLong() * 1000, 100) {
+            override fun onTick(millisUntilFinished: Long) {
+                startCountdownText.text = Math.ceil(currentStartTime).toInt().toString()
+                currentStartTime -= 0.1
+            }
+
+            override fun onFinish() {
+                gameCountdownTimer.start()
                 startCountdownLayout.visibility = View.INVISIBLE
             }
         }
@@ -53,10 +68,28 @@ class MainActivity : FragmentActivity() {
             super.onBackPressed()
     }
 
+    override fun onDialogPositiveClick(dialog: DialogFragment) {
+        hideFragment(supportFragmentManager, gameplayFragment)
+        resetGame()
+    }
+
+    override fun onDialogNegativeClick(dialog: DialogFragment) {
+        hideFragment(supportFragmentManager, gameplayFragment)
+        resetGame()
+        gameCountdownText.text = "5"
+        gameMainText.text = "TAP"
+        gameScoreText.text = "0"
+
+        startCountdownTimer.start()
+
+        showFragment(supportFragmentManager, gameplayFragment)
+    }
+
     private fun resetGame() {
         startCountdownTimer.cancel()
         taps = 0
         startCountdownLayout.visibility = View.VISIBLE
-        currentTime = START_COUNTDOWN_TIME.toDouble()
+        currentStartTime = START_COUNTDOWN_TIME.toDouble()
+        currentGameTime = GAMEPLAY_COUNTDOWN_TIME.toDouble()
     }
 }
