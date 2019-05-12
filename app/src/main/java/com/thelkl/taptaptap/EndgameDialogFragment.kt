@@ -29,7 +29,8 @@ class EndgameDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(activity as Context)
-        builder.setMessage("You scored " + (arguments?.getInt(ENDGAME_DIALOG_FRAGMENT_TAPS_KEY) ?: "NO ARGUMENTS PASSED") + " taps")
+        builder.setMessage("You scored " + (arguments?.getInt(ENDGAME_DIALOG_FRAGMENT_TAPS_KEY) ?: "<NO ARGUMENTS PASSED>") + " taps"
+                +  if (arguments?.getBoolean(ENDGAME_DIALOG_FRAGMENT_IFHIGHSCORE_KEY) == true) "\nHIGHSCORE!" else "")
             .setPositiveButton("Cool!"
             ) { _, _ -> listener.onDialogPositiveClick(this@EndgameDialogFragment) }
             .setNegativeButton("Try again"
