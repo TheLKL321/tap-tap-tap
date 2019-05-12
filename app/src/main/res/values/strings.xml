@@ -3,4 +3,9 @@
     <string name="title">DaftTap Challenge</string>
     <string name="play">Play</string>
     <string name="tap">TAP</string>
+    <string name="first_encouragement">FASTER</string>
+    <string name="second_encouragement">KEEP GOING</string>
+    <string name="thrid__encouragement">YOU CAN DO IT</string>
+    <string name="fourth_encouragement">DON\'T STOP</string>
+    <string name="fifth_encouragement">AMAZING</string>
 </resources>

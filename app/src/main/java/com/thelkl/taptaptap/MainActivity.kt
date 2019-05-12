@@ -21,7 +21,9 @@ class MainActivity : FragmentActivity(), EndgameDialogFragment.EndgameDialogList
 
     // gameplay
     private var taps = 0
-    private val encouragementArray = arrayListOf("TAP", "FASTER", "KEEP GOING", "YOU CAN DO IT", "DON'T STOP", "AMAZING")
+    private val encouragementArray = arrayListOf(getString(R.string.tap), getString(R.string.first_encouragement),
+        getString(R.string.second_encouragement), getString(R.string.thrid__encouragement),
+        getString(R.string.fourth_encouragement), getString(R.string.fifth_encouragement))
     private var currentEncouragement = 0
     private lateinit var startCountdownTimer: CountDownTimer
     private lateinit var gameCountdownTimer: CountDownTimer
