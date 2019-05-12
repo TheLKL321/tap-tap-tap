@@ -20,6 +20,7 @@ fun newEndgameDialogInstance(taps: Int, ifHighscore: Boolean): EndgameDialogFrag
     bundle.putInt(ENDGAME_DIALOG_FRAGMENT_TAPS_KEY, taps)
     bundle.putBoolean(ENDGAME_DIALOG_FRAGMENT_IFHIGHSCORE_KEY, ifHighscore)
     fragment.arguments = bundle
+    fragment.isCancelable = false
 
     return fragment
 }
