@@ -86,8 +86,15 @@ class MainActivity : FragmentActivity(), EndgameDialogFragment.EndgameDialogList
 
     override fun onPause() {
         super.onPause()
+
         // Save highscores in shared preferences
         sharedPrefs.edit().putString(SHARED_PREFERENCES_HIGHSCORE_DATASET_KEY, serialize(highscoreRecordArray)).apply()
+
+        // Exit current game
+        if (gameplayFragment.isVisible) {
+            hideFragment(supportFragmentManager, gameplayFragment)
+            resetGame()
+        }
     }
 
     fun onPlayPressed(@Suppress("UNUSED_PARAMETER") view: View) {
@@ -156,6 +163,7 @@ class MainActivity : FragmentActivity(), EndgameDialogFragment.EndgameDialogList
 
     // Reset values after the game ends
     private fun resetGame() {
+        gameCountdownTimer.cancel()
         startCountdownTimer.cancel()
         taps = 0
         startCountdownLayout.visibility = View.VISIBLE
