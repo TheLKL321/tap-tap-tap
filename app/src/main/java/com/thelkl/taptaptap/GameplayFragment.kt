@@ -7,12 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 
 class GameplayFragment : Fragment() {
-    companion object {
-        fun newInstance(): GameplayFragment {
-            return GameplayFragment()
-        }
-    }
-
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {

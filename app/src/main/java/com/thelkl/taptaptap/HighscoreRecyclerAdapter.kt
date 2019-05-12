@@ -11,22 +11,17 @@ class HighscoreRecyclerAdapter(private val dataset: ArrayList<Pair<String, Strin
 
     class HighscoreViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 
-    // invoked by the layout manager
-    override fun onCreateViewHolder(parent: ViewGroup,
-                                    viewType: Int): HighscoreViewHolder {
-
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HighscoreViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.highscore_recycler_row, parent, false)
 
         return HighscoreViewHolder(view)
     }
 
-    // invoked by the layout manager
     override fun onBindViewHolder(holder: HighscoreViewHolder, position: Int) {
         holder.view.findViewById<TextView>(R.id.recordScoreText).text = dataset[position].first
         holder.view.findViewById<TextView>(R.id.recordTimestampText).text = dataset[position].second
     }
 
-    // invoked by the layout manager
     override fun getItemCount() = dataset.size
 }

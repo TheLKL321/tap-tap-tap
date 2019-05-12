@@ -1,5 +1,7 @@
 package com.thelkl.taptaptap
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.support.v4.app.DialogFragment
@@ -11,18 +13,24 @@ import android.view.View
 import kotlinx.android.synthetic.main.gameplay_fragment.*
 import kotlinx.android.synthetic.main.main_activity.*
 import java.util.*
+import kotlin.collections.ArrayList
+
 
 class MainActivity : FragmentActivity(), EndgameDialogFragment.EndgameDialogListener {
+    private lateinit var sharedPrefs: SharedPreferences
+
+    // gameplay
     private var taps = 0
     private lateinit var startCountdownTimer: CountDownTimer
     private lateinit var gameCountdownTimer: CountDownTimer
-    var currentStartTime: Double = START_COUNTDOWN_TIME.toDouble()
-    var currentGameTime: Double = GAMEPLAY_COUNTDOWN_TIME.toDouble()
+    private var currentStartTime: Double = START_COUNTDOWN_TIME.toDouble()
+    private var currentGameTime: Double = GAMEPLAY_COUNTDOWN_TIME.toDouble()
 
+    // highscore keeping
     private lateinit var highscoreRecyclerView: RecyclerView
     private lateinit var highscoreRecyclerViewManager: RecyclerView.LayoutManager
     private lateinit var highscoreRecyclerViewAdapter: RecyclerView.Adapter<HighscoreRecyclerAdapter.HighscoreViewHolder>
-    private var highscoreRecordArray = arrayListOf<Pair<String, String>>()  // <taps, timestamp>
+    private lateinit var highscoreRecordArray: ArrayList<Pair<String, String>>  // <taps, timestamp>
     private var lastGameTimestamp = "<TIMESTAMP NOT SET>"
     private var lastGameIfHighscore = false
 
@@ -32,6 +40,11 @@ class MainActivity : FragmentActivity(), EndgameDialogFragment.EndgameDialogList
 
         hideFragment(supportFragmentManager, gameplayFragment)
 
+        // Get shared preferences
+        sharedPrefs = applicationContext.getSharedPreferences(SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE)
+        val serializedRecordArray = sharedPrefs.getString(SHARED_PREFERENCES_HIGHSCORE_DATASET_KEY, null)
+        highscoreRecordArray = if (serializedRecordArray != null) deserialize(serializedRecordArray) else ArrayList()
+
         // Create timers
         gameCountdownTimer = object: CountDownTimer(GAMEPLAY_COUNTDOWN_TIME.toLong() * 1000, 100) {
             override fun onTick(millisUntilFinished: Long) {
@@ -40,6 +53,7 @@ class MainActivity : FragmentActivity(), EndgameDialogFragment.EndgameDialogList
             }
 
             override fun onFinish() {
+                gameCountdownText.text = "0"
                 lastGameIfHighscore = highscoreRecordArray.size < 5 ||
                         ((highscoreRecordArray.minBy { it.first.toInt() })?.first ?: "-1")!!.toInt() < taps
                 newEndgameDialogInstance(taps, lastGameIfHighscore).show(supportFragmentManager, "endgame_dialog")
@@ -68,11 +82,17 @@ class MainActivity : FragmentActivity(), EndgameDialogFragment.EndgameDialogList
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        // Save highscores in shared preferences
+        sharedPrefs.edit().putString(SHARED_PREFERENCES_HIGHSCORE_DATASET_KEY, serialize(highscoreRecordArray)).apply()
+    }
+
     fun onPlayPressed(@Suppress("UNUSED_PARAMETER") view: View) {
         startGame()
     }
 
-    fun tap(@Suppress("UNUSED_PARAMETER") view: View) {
+    fun onTap(@Suppress("UNUSED_PARAMETER") view: View) {
         taps++
         gameScoreText.text = taps.toString()
     }
@@ -86,29 +106,19 @@ class MainActivity : FragmentActivity(), EndgameDialogFragment.EndgameDialogList
     }
 
     override fun onDialogPositiveClick(dialog: DialogFragment) {
-        hideFragment(supportFragmentManager, gameplayFragment)
-        saveRecord()
-        resetGame()
+        endGame()
     }
 
     override fun onDialogNegativeClick(dialog: DialogFragment) {
-        hideFragment(supportFragmentManager, gameplayFragment)
-        saveRecord()
-        resetGame()
+        endGame()
         startGame()
     }
 
+    // Begin a new game
     private fun startGame() {
         gameCountdownText.text = "5"
         gameMainText.text = getString(R.string.tap)
         gameScoreText.text = "0"
-
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            lastGameTimestamp = DateTimeFormatter
-                .ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS")
-                .withZone(TimeZone.getDefault().toZoneId())
-                .format(Instant.now())
-        }*/
 
         val currentDate = Date()
         lastGameTimestamp = DateFormat.format("dd/MM hh:mm:ss", currentDate).toString()
@@ -118,14 +128,14 @@ class MainActivity : FragmentActivity(), EndgameDialogFragment.EndgameDialogList
         showFragment(supportFragmentManager, gameplayFragment)
     }
 
-    private fun resetGame() {
-        startCountdownTimer.cancel()
-        taps = 0
-        startCountdownLayout.visibility = View.VISIBLE
-        currentStartTime = START_COUNTDOWN_TIME.toDouble()
-        currentGameTime = GAMEPLAY_COUNTDOWN_TIME.toDouble()
+    // End a current game
+    private fun endGame() {
+        hideFragment(supportFragmentManager, gameplayFragment)
+        saveRecord()
+        resetGame()
     }
 
+    // Register a potential highscore
     private fun saveRecord() {
         if (lastGameIfHighscore) {
             val record = Pair(taps.toString(), lastGameTimestamp)
@@ -136,5 +146,14 @@ class MainActivity : FragmentActivity(), EndgameDialogFragment.EndgameDialogList
         }
         highscoreRecordArray.sortByDescending { it.first.toInt() }
         highscoreRecyclerViewAdapter.notifyDataSetChanged()
+    }
+
+    // Reset values after the game ends
+    private fun resetGame() {
+        startCountdownTimer.cancel()
+        taps = 0
+        startCountdownLayout.visibility = View.VISIBLE
+        currentStartTime = START_COUNTDOWN_TIME.toDouble()
+        currentGameTime = GAMEPLAY_COUNTDOWN_TIME.toDouble()
     }
 }
