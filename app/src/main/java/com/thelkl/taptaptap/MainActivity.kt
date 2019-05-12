@@ -21,6 +21,8 @@ class MainActivity : FragmentActivity(), EndgameDialogFragment.EndgameDialogList
 
     // gameplay
     private var taps = 0
+    private val encouragementArray = arrayListOf("TAP", "FASTER", "KEEP GOING", "YOU CAN DO IT", "DON'T STOP", "AMAZING")
+    private var currentEncouragement = 0
     private lateinit var startCountdownTimer: CountDownTimer
     private lateinit var gameCountdownTimer: CountDownTimer
     private var currentStartTime: Double = START_COUNTDOWN_TIME.toDouble()
@@ -95,6 +97,10 @@ class MainActivity : FragmentActivity(), EndgameDialogFragment.EndgameDialogList
     fun onTap(@Suppress("UNUSED_PARAMETER") view: View) {
         taps++
         gameScoreText.text = taps.toString()
+        if (taps / 20 > currentEncouragement) {
+            currentEncouragement++
+            gameMainText.text = encouragementArray[currentEncouragement]
+        }
     }
 
     override fun onBackPressed() {
