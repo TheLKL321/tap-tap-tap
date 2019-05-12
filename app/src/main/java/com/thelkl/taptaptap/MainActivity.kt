@@ -41,7 +41,7 @@ class MainActivity : FragmentActivity(), EndgameDialogFragment.EndgameDialogList
 
             override fun onFinish() {
                 lastGameIfHighscore = highscoreRecordArray.size < 5 ||
-                        ((highscoreRecordArray.minBy { it.first })?.first ?: "0")!!.toInt() < taps
+                        ((highscoreRecordArray.minBy { it.first.toInt() })?.first ?: "-1")!!.toInt() < taps
                 newEndgameDialogInstance(taps, lastGameIfHighscore).show(supportFragmentManager, "endgame_dialog")
             }
         }
