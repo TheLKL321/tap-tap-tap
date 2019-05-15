@@ -21,9 +21,7 @@ class MainActivity : FragmentActivity(), EndgameDialogFragment.EndgameDialogList
 
     // gameplay
     private var taps = 0
-    private val encouragementArray = arrayListOf(getString(R.string.tap), getString(R.string.first_encouragement),
-        getString(R.string.second_encouragement), getString(R.string.thrid__encouragement),
-        getString(R.string.fourth_encouragement), getString(R.string.fifth_encouragement))
+    private lateinit var encouragementArray: ArrayList<String>
     private var currentEncouragement = 0
     private lateinit var startCountdownTimer: CountDownTimer
     private lateinit var gameCountdownTimer: CountDownTimer
@@ -43,6 +41,10 @@ class MainActivity : FragmentActivity(), EndgameDialogFragment.EndgameDialogList
         setContentView(R.layout.main_activity)
 
         hideFragment(supportFragmentManager, gameplayFragment)
+
+        encouragementArray = arrayListOf(getString(R.string.tap), getString(R.string.first_encouragement),
+            getString(R.string.second_encouragement), getString(R.string.thrid__encouragement),
+            getString(R.string.fourth_encouragement), getString(R.string.fifth_encouragement))
 
         // Get shared preferences
         sharedPrefs = applicationContext.getSharedPreferences(SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE)
