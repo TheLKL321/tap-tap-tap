@@ -6,6 +6,8 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
+import com.thelkl.taptaptap.utils.ENDGAME_DIALOG_FRAGMENT_IFHIGHSCORE_KEY
+import com.thelkl.taptaptap.utils.ENDGAME_DIALOG_FRAGMENT_TAPS_KEY
 
 class EndgameDialogFragment : DialogFragment() {
     interface EndgameDialogListener {

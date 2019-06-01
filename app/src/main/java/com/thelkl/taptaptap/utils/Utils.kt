@@ -1,17 +1,8 @@
-package com.thelkl.taptaptap
+package com.thelkl.taptaptap.utils
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
+import com.thelkl.taptaptap.EndgameDialogFragment
 import java.io.*
-
-fun showFragment(fm: FragmentManager, fragment: Fragment) {
-    fm.beginTransaction().show(fragment).commit()
-}
-
-fun hideFragment(fm: FragmentManager, fragment: Fragment) {
-    fm.beginTransaction().hide(fragment).commit()
-}
 
 // creates a new EndgameDialog and passed required data
 fun newEndgameDialogInstance(taps: Int, ifHighscore: Boolean): EndgameDialogFragment {

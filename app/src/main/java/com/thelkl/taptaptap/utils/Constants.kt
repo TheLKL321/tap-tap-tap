@@ -1,4 +1,4 @@
-package com.thelkl.taptaptap
+package com.thelkl.taptaptap.utils
 
 // Keys
 const val SHARED_PREFERENCES_KEY = "preferencezzz"
