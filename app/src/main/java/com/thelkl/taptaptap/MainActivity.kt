@@ -43,7 +43,7 @@ class MainActivity : FragmentActivity(), EndgameDialogFragment.EndgameDialogList
         hideFragment(supportFragmentManager, gameplayFragment)
 
         encouragementArray = arrayListOf(getString(R.string.tap), getString(R.string.first_encouragement),
-            getString(R.string.second_encouragement), getString(R.string.thrid__encouragement),
+            getString(R.string.second_encouragement), getString(R.string.third_encouragement),
             getString(R.string.fourth_encouragement), getString(R.string.fifth_encouragement))
 
         // Get shared preferences
