@@ -18,9 +18,8 @@ fun newEndgameDialogInstance(taps: Int, ifHighscore: Boolean): EndgameDialogFrag
 
 // Serializes an object into a string
 fun <T : Serializable> serialize(obj: T?): String {
-    if (obj == null) {
+    if (obj == null)
         return ""
-    }
 
     val baos = ByteArrayOutputStream()
     val oos = ObjectOutputStream(baos)

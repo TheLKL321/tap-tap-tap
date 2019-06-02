@@ -1,7 +1,7 @@
 package com.thelkl.taptaptap.utils
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 
 fun FragmentManager.showFragment(fragment: Fragment) {
     this.beginTransaction().show(fragment).commit()

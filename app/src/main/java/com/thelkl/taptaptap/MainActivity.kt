@@ -4,10 +4,10 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.support.v4.app.DialogFragment
-import android.support.v4.app.FragmentActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.text.format.DateFormat
 import android.view.View
 import com.thelkl.taptaptap.utils.*
@@ -87,8 +87,8 @@ class MainActivity : FragmentActivity(), EndgameDialogFragment.EndgameDialogList
         highscoreRecyclerViewAdapter = HighscoreRecyclerAdapter(highscoreRecordArray)
         highscoreRecyclerView = highscoreRecycler.apply {
             setHasFixedSize(true)
-            layoutManager = highscoreRecyclerViewManager
-            adapter = highscoreRecyclerViewAdapter
+            this.layoutManager = highscoreRecyclerViewManager
+            this.adapter = highscoreRecyclerViewAdapter
         }
     }
 
