@@ -1,11 +1,11 @@
-package com.thelkl.taptaptap
+package com.thelkl.taptaptap.ui
 
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import com.thelkl.taptaptap.utils.ENDGAME_DIALOG_FRAGMENT_IFHIGHSCORE_KEY
 import com.thelkl.taptaptap.utils.ENDGAME_DIALOG_FRAGMENT_TAPS_KEY
 

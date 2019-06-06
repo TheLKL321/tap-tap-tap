@@ -1,7 +1,7 @@
 package com.thelkl.taptaptap.utils
 
 import android.os.Bundle
-import com.thelkl.taptaptap.EndgameDialogFragment
+import com.thelkl.taptaptap.ui.EndgameDialogFragment
 import java.io.*
 
 // creates a new EndgameDialog and passed required data

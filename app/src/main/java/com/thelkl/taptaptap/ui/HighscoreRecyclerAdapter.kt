@@ -1,12 +1,14 @@
-package com.thelkl.taptaptap
+package com.thelkl.taptaptap.ui
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.thelkl.taptaptap.R
+import com.thelkl.taptaptap.Record
 
-class HighscoreRecyclerAdapter(private val dataset: ArrayList<Pair<String, String>>) :
+class HighscoreRecyclerAdapter(private val dataset: ArrayList<Record>) :
     RecyclerView.Adapter<HighscoreRecyclerAdapter.HighscoreViewHolder>() {
 
     class HighscoreViewHolder(val view: View) : RecyclerView.ViewHolder(view)
@@ -19,8 +21,8 @@ class HighscoreRecyclerAdapter(private val dataset: ArrayList<Pair<String, Strin
     }
 
     override fun onBindViewHolder(holder: HighscoreViewHolder, position: Int) {
-        holder.view.findViewById<TextView>(R.id.recordScoreText).text = dataset[position].first
-        holder.view.findViewById<TextView>(R.id.recordTimestampText).text = dataset[position].second
+        holder.view.findViewById<TextView>(R.id.recordScoreText).text = dataset[position].scoreText
+        holder.view.findViewById<TextView>(R.id.recordTimestampText).text = dataset[position].timestampText
     }
 
     override fun getItemCount() = dataset.size
