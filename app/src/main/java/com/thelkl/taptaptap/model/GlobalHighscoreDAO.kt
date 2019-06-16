@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.android.volley.Request
 import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.thelkl.taptaptap.Record
@@ -23,11 +24,11 @@ class GlobalHighscoreDAO {
         globalHighscores.value = highscoreRecordArray
     }
 
+    // Sends a GET request for global highscores
     fun refreshData(context: Context) {
         val queue = Volley.newRequestQueue(context)
         val url = SERVER_URL
 
-        // Request a string response from the provided URL.
         val stringRequest = StringRequest(
             Request.Method.GET, url,
             Response.Listener<String> { response ->
@@ -40,14 +41,30 @@ class GlobalHighscoreDAO {
                 }
                 globalHighscores.value = highscoreRecordArray
             },
-            Response.ErrorListener { Log.e(LOG_TAG, "Failed to fetch global highscores") })
+            Response.ErrorListener { res -> Log.e(LOG_TAG, "Failed to fetch global highscores: $res") })
 
-        // Add the request to the RequestQueue.
         queue.add(stringRequest)
     }
 
+    // Sends a POST request to the server, with a given highscore
     fun addHighscore(record: Record, context: Context) {
-        // TODO
+        val json = JSONObject()
+        json.put("taps", record.scoreText)
+        json.put("timestamp", record.timestampText)
+        json.put("nickname", "PLACEHOLDER")
+
+        val queue = Volley.newRequestQueue(context)
+        val url = "$SERVER_URL/addRecord"
+
+        val jsonRequest = JsonObjectRequest(
+            Request.Method.POST, url, json,
+            Response.Listener<JSONObject> {
+                Log.d(LOG_TAG, "Highscore sent successfully")
+                refreshData(context)
+            },
+            Response.ErrorListener { res -> Log.e(LOG_TAG, "Failed to send a highscore: $res") })
+
+        queue.add(jsonRequest)
     }
 
     fun getHighscores() = globalHighscores as LiveData<ArrayList<Record>>
