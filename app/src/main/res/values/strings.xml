@@ -8,4 +8,5 @@
     <string name="third_encouragement">YOU CAN DO IT</string> <!--TODO: justify-->
     <string name="fourth_encouragement">DON\'T STOP</string>
     <string name="fifth_encouragement">AMAZING</string>
+    <string name="global_highscore">GLOBAL HIGHSCORE</string>
 </resources>

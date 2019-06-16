@@ -1,4 +1,4 @@
-package com.thelkl.taptaptap.ui
+package com.thelkl.taptaptap.view
 
 import android.os.Bundle
 import android.view.LayoutInflater

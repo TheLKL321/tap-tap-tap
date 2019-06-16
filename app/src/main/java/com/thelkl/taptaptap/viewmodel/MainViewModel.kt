@@ -1,4 +1,4 @@
-package com.thelkl.taptaptap.ui
+package com.thelkl.taptaptap.viewmodel
 
 import android.app.Application
 import android.os.CountDownTimer
@@ -48,7 +48,9 @@ class MainViewModel(private val highscoreRepository: HighscoreRepository, app: A
 
         override fun onFinish() {
             gameCountdown.value = "0"
-            ifHighscore = addHighscore(Record(timestampText = lastGameTimestamp, scoreText = tapCount.toString()))
+            val record = Record(timestampText = lastGameTimestamp, scoreText = tapCount.toString())
+            ifHighscore = addLocalHighscore(record)
+            addGlobalHighscore(record.copy())
             ifGameFinished.value = true
         }
     }
@@ -107,9 +109,13 @@ class MainViewModel(private val highscoreRepository: HighscoreRepository, app: A
         }
     }
 
-    fun addHighscore(record: Record) : Boolean = highscoreRepository.addHighscore(record)
+    fun refreshGlobalData() = highscoreRepository.refreshGlobalData()
+
+    fun addLocalHighscore(record: Record) : Boolean = highscoreRepository.addLocalHighscore(record)
+    fun addGlobalHighscore(record: Record) = highscoreRepository.addGlobalHighscore(record)
 
     fun getLocalHighscores() = highscoreRepository.getLocalHighscores()
+    fun getGlobalHighscores() = highscoreRepository.getGlobalHighscores()
     fun getTaps() = taps as LiveData<Int>
     fun getGameCountdown() = gameCountdown as LiveData<String>
     fun getIfGameFinished() = ifGameFinished as LiveData<Boolean>

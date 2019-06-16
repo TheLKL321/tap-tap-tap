@@ -9,7 +9,7 @@ import com.thelkl.taptaptap.utils.deserialize
 import com.thelkl.taptaptap.utils.serialize
 
 class LocalHighscoreDAO(private val sharedPrefs: SharedPreferences) {
-    private val highscoreRecordArray: ArrayList<Record>  // <taps, timestamp>
+    private val highscoreRecordArray: ArrayList<Record>
     private val localHighscores = MutableLiveData<ArrayList<Record>>()
 
     init {

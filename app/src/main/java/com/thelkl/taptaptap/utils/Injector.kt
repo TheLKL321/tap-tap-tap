@@ -4,13 +4,13 @@ import android.app.Application
 import android.content.Context
 import com.thelkl.taptaptap.model.HighscoreDatabase
 import com.thelkl.taptaptap.model.HighscoreRepository
-import com.thelkl.taptaptap.ui.MainViewModelFactory
+import com.thelkl.taptaptap.viewmodel.MainViewModelFactory
 
 object Injector {
 
     fun provideMainViewModelFactory(app: Application): MainViewModelFactory {
-        val highscoreRepository = HighscoreRepository.getInstance(HighscoreDatabase.getInstance(app.getSharedPreferences(
-            SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE)).localHighscoreDAO)
+        val database = HighscoreDatabase.getInstance(app.getSharedPreferences(SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE))
+        val highscoreRepository = HighscoreRepository.getInstance(database.localHighscoreDAO, database.globalHighscoreDAO)
         return MainViewModelFactory(highscoreRepository, app)
     }
 }

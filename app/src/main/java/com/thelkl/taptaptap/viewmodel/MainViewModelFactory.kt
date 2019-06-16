@@ -1,4 +1,4 @@
-package com.thelkl.taptaptap.ui
+package com.thelkl.taptaptap.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.ViewModel

@@ -1,4 +1,4 @@
-package com.thelkl.taptaptap.ui
+package com.thelkl.taptaptap.view
 
 import android.os.Bundle
 import android.view.View
@@ -14,6 +14,7 @@ import com.thelkl.taptaptap.utils.Injector
 import com.thelkl.taptaptap.utils.hideFragment
 import com.thelkl.taptaptap.utils.newEndgameDialogInstance
 import com.thelkl.taptaptap.utils.showFragment
+import com.thelkl.taptaptap.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.gameplay_fragment.*
 import kotlinx.android.synthetic.main.main_activity.*
 
@@ -23,8 +24,10 @@ class MainActivity : FragmentActivity(), EndgameDialogFragment.EndgameDialogList
     // Highscore table
     private lateinit var highscoreRecyclerView: RecyclerView
     private lateinit var highscoreRecyclerViewManager: RecyclerView.LayoutManager
-    private lateinit var highscoreRecyclerViewAdapter: RecyclerView.Adapter<HighscoreRecyclerAdapter.HighscoreViewHolder>
-    private var highscoreRecordArray = ArrayList<Record>()  // <tapCount, timestamp>
+    private lateinit var localHighscoreRecyclerViewAdapter: RecyclerView.Adapter<HighscoreRecyclerAdapter.HighscoreViewHolder>
+    private lateinit var globalHighscoreRecyclerViewAdapter: RecyclerView.Adapter<HighscoreRecyclerAdapter.HighscoreViewHolder>
+    private var globalHighscoreRecordArray = ArrayList<Record>()
+    private var localHighscoreRecordArray = ArrayList<Record>()
 
     private lateinit var viewModel: MainViewModel
 
@@ -41,20 +44,37 @@ class MainActivity : FragmentActivity(), EndgameDialogFragment.EndgameDialogList
         viewModel = ViewModelProviders.of(this, Injector.provideMainViewModelFactory(application))
             .get(MainViewModel::class.java)
 
-        // Create the highscore table
+        // Views
         highscoreRecyclerViewManager = LinearLayoutManager(this)
-        highscoreRecyclerViewAdapter = HighscoreRecyclerAdapter(highscoreRecordArray)
+        localHighscoreRecyclerViewAdapter = HighscoreRecyclerAdapter(localHighscoreRecordArray)
         highscoreRecyclerView = highscoreRecycler.apply {
             setHasFixedSize(true)
             this.layoutManager = highscoreRecyclerViewManager
-            this.adapter = highscoreRecyclerViewAdapter
+            this.adapter = localHighscoreRecyclerViewAdapter
+        }
+
+        globalHighscoreRecyclerViewAdapter = HighscoreRecyclerAdapter(globalHighscoreRecordArray)
+
+        globalHighscoreSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                viewModel.refreshGlobalData()
+                highscoreRecyclerView.adapter = globalHighscoreRecyclerViewAdapter
+            } else {
+                highscoreRecyclerView.adapter = localHighscoreRecyclerViewAdapter
+            }
         }
 
         // Observers
         viewModel.getLocalHighscores().observe(this, Observer { localHighscores ->
-            highscoreRecordArray.clear()
-            highscoreRecordArray.addAll(localHighscores)
-            highscoreRecyclerViewAdapter.notifyDataSetChanged()
+            localHighscoreRecordArray.clear()
+            localHighscoreRecordArray.addAll(localHighscores)
+            localHighscoreRecyclerViewAdapter.notifyDataSetChanged()
+        })
+
+        viewModel.getGlobalHighscores().observe(this, Observer { globalHighscores ->
+            globalHighscoreRecordArray.clear()
+            globalHighscoreRecordArray.addAll(globalHighscores)
+            globalHighscoreRecyclerViewAdapter.notifyDataSetChanged()
         })
 
         viewModel.getTaps().observe(this, Observer { taps -> gameScoreText.text = taps.toString() })
