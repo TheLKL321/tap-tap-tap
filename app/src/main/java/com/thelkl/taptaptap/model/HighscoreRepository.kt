@@ -1,10 +1,11 @@
 package com.thelkl.taptaptap.model
 
+import android.content.Context
 import com.thelkl.taptaptap.Record
 
 class HighscoreRepository private constructor(private val localHighscoreDAO: LocalHighscoreDAO, private val globalHighscoreDAO: GlobalHighscoreDAO){
 
-    fun refreshGlobalData() = globalHighscoreDAO.refreshData()
+    fun refreshGlobalData(context: Context) = globalHighscoreDAO.refreshData(context)
 
     // Tries to add a highscore, returns true if it made it to the list, otherwise false
     fun addLocalHighscore(record: Record) : Boolean {
@@ -18,7 +19,7 @@ class HighscoreRepository private constructor(private val localHighscoreDAO: Loc
     }
 
     // Sends a highscore to the server
-    fun addGlobalHighscore(record: Record) = globalHighscoreDAO.addHighscore(record)
+    fun addGlobalHighscore(record: Record, context: Context) = globalHighscoreDAO.addHighscore(record, context)
 
     fun getLocalHighscores() = localHighscoreDAO.getHighscores()
     fun getGlobalHighscores() = globalHighscoreDAO.getHighscores()

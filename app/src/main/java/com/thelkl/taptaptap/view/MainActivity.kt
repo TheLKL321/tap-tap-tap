@@ -128,6 +128,11 @@ class MainActivity : FragmentActivity(), EndgameDialogFragment.EndgameDialogList
             super.onBackPressed()
     }
 
+    override fun onStop() {
+        //TODO: cancel all requests
+        super.onStop()
+    }
+
     override fun onDialogPositiveClick(dialog: DialogFragment) { endGame() }
 
     override fun onDialogNegativeClick(dialog: DialogFragment) {
