@@ -15,23 +15,29 @@ import com.thelkl.taptaptap.utils.SERVER_URL
 import org.json.JSONArray
 import org.json.JSONObject
 
+private const val REQUEST_TAG = "GlobalHighscore"
 
-class GlobalHighscoreDAO {
+class GlobalHighscoreDAO(context: Context) {
     private val highscoreRecordArray = ArrayList<Record>()
     private val globalHighscores = MutableLiveData<ArrayList<Record>>()
+    private val requestQueue = Volley.newRequestQueue(context)
 
     init {
         globalHighscores.value = highscoreRecordArray
     }
 
+    fun cancelRequests() {
+        requestQueue.cancelAll(REQUEST_TAG)
+    }
+
     // Sends a GET request for global highscores
-    fun refreshData(context: Context) {
-        val queue = Volley.newRequestQueue(context)
+    fun refreshData() {
         val url = SERVER_URL
 
         val stringRequest = StringRequest(
             Request.Method.GET, url,
             Response.Listener<String> { response ->
+                Log.d(LOG_TAG, "Global highscores fetched successfully")
                 val array = JSONArray(response)
                 highscoreRecordArray.clear()
                 (0 until array.length()).forEach { i ->
@@ -41,30 +47,32 @@ class GlobalHighscoreDAO {
                 }
                 globalHighscores.value = highscoreRecordArray
             },
-            Response.ErrorListener { res -> Log.e(LOG_TAG, "Failed to fetch global highscores: $res") })
+            Response.ErrorListener { res ->
+                Log.e(LOG_TAG, "Failed to fetch global highscores: $res")
+            }).apply { this.tag = REQUEST_TAG }
 
-        queue.add(stringRequest)
+        requestQueue.add(stringRequest)
     }
 
     // Sends a POST request to the server, with a given highscore
-    fun addHighscore(record: Record, context: Context) {
+    fun addHighscore(record: Record) {
         val json = JSONObject()
         json.put("taps", record.scoreText)
         json.put("timestamp", record.timestampText)
         json.put("nickname", "PLACEHOLDER")
-
-        val queue = Volley.newRequestQueue(context)
         val url = "$SERVER_URL/addRecord"
 
         val jsonRequest = JsonObjectRequest(
             Request.Method.POST, url, json,
             Response.Listener<JSONObject> {
                 Log.d(LOG_TAG, "Highscore sent successfully")
-                refreshData(context)
+                refreshData()
             },
-            Response.ErrorListener { res -> Log.e(LOG_TAG, "Failed to send a highscore: $res") })
+            Response.ErrorListener { res ->
+                Log.e(LOG_TAG, "Failed to send a highscore: $res")
+            }).apply { this.tag = REQUEST_TAG }
 
-        queue.add(jsonRequest)
+        requestQueue.add(jsonRequest)
     }
 
     fun getHighscores() = globalHighscores as LiveData<ArrayList<Record>>

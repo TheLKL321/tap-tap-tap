@@ -129,8 +129,8 @@ class MainActivity : FragmentActivity(), EndgameDialogFragment.EndgameDialogList
     }
 
     override fun onStop() {
-        //TODO: cancel all requests
         super.onStop()
+        viewModel.cancelGlobalHighscoreRequests()
     }
 
     override fun onDialogPositiveClick(dialog: DialogFragment) { endGame() }

@@ -12,4 +12,4 @@ const val GAMEPLAY_COUNTDOWN_TIME = 5
 
 const val LOG_TAG = "TapTapTap"
 
-const val SERVER_URL = "http://10.0.2.2:7100"
+const val SERVER_URL = "http://students.mimuw.edu.pl:7100"

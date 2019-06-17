@@ -109,10 +109,11 @@ class MainViewModel(private val highscoreRepository: HighscoreRepository, app: A
         }
     }
 
-    fun refreshGlobalData() = highscoreRepository.refreshGlobalData(getApplication())
+    fun cancelGlobalHighscoreRequests() = highscoreRepository.cancelGlobalHighscoreRequests()
+    fun refreshGlobalData() = highscoreRepository.refreshGlobalData()
 
     fun addLocalHighscore(record: Record) : Boolean = highscoreRepository.addLocalHighscore(record)
-    fun addGlobalHighscore(record: Record) = highscoreRepository.addGlobalHighscore(record, getApplication())
+    fun addGlobalHighscore(record: Record) = highscoreRepository.addGlobalHighscore(record)
 
     fun getLocalHighscores() = highscoreRepository.getLocalHighscores()
     fun getGlobalHighscores() = highscoreRepository.getGlobalHighscores()
